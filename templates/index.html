@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Photo Gallery</h1>
+    <p class="capture-text">Save Your Dream Moment</p>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <button type="submit">Upload</button>
+    </form>
+
+    <div class="gallery">
+        {% for image in images %}
+            <div class="image-container">
+                <img src="{{ url_for('uploaded_file', filename=image.filename) }}" alt="Uploaded Image" onclick="openModal(this)">
+                <form action="{{ url_for('delete_file', image_id=image.id) }}" method="post">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Modal for Image Zoom -->
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modalImg">
+    </div>
+
+    <script>
+        function openModal(img) {
+            document.getElementById("imageModal").style.display = "block";
+            document.getElementById("modalImg").src = img.src;
+        }
+
+        function closeModal() {
+            document.getElementById("imageModal").style.display = "none";
+        }
+    </script>
+</body>
+</html>
